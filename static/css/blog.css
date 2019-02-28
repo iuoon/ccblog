@@ -1,0 +1,15 @@
+.head_c{
+    background-color: #fff;
+    border-bottom: 1px solid #DDD;
+    height: 50px;
+}
+.layout_1{
+    height: 1080px;
+}
+.a_head_title{
+    font-size: large;
+    color: #25befe;
+    float: left;
+    margin-left: 20px;
+    margin-top: 10px;
+}

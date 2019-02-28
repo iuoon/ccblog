@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>XXXX</title>
+    <script src="../static/vue/vue.min.js"></script>
+    <link rel="stylesheet" href="../static/iview/iview.css">
+    <script src="../static/iview/iview.min.js"></script>
+    <script src="../static/js/axios.min.js"></script>
+    <script src="../static/js/xhead.js"></script>
+    <script src="../static/js/xrank.js"></script>
+    <link rel="stylesheet" href="../static/css/blog.css">
+</head>
+<body>
+<div id="app">
+    <div style="height: 100%" class="layout">
+        <Layout>
+            <Header class="head_c"><component :is="componentHead"></component></Header>
+            <Layout class="layout_1">
+                <Content :style="{margin: '20px',width: '100%', background: '#fff', minHeight: '820px'}">Content</Content>
+                <Sider class="sider" :style="{width: '300px','max-width':'300px',flex:'0 0 300px'}"><component :is="componentRank"></component></Sider>
+            </Layout>
+            <Footer>Footer</Footer>
+        </Layout>
+    </div>
+</div>
+<script>
+    const sys = new Vue({
+        el: '#app',
+        data: {
+            componentName: 'comWelcome',
+            componentHead: 'xhead',
+            componentRank: 'xrank',
+            strUserName: "",
+            strPwd: ""
+        },
+        components: {
+            xhead:headContent(1),
+            xrank:rankContent(1)
+        },
+        methods: {
+            doLogin: function () {
+                var self=this
+                axios.get("/ops/user/login?strUserName=" + this.strUserName+"&strPwd="+this.strPwd)
+                    .then(function (res) {
+                        console.log(res.data);
+                        if (res.data.code == 0){
+                            window.location.href="index.html"
+                            return
+                        } else{
+                            self.$Modal.info({
+                                title: '提示',
+                                width: '300px',
+                                content: res.data.msg
+                            })
+                        }
+                    })
+                    .catch(function (error) {
+                        console.log(error)
+                        self.$Modal.info({
+                            title: '提示',
+                            width: '300px',
+                            content: '登录失败'
+                        })
+                    });
+            }
+
+        }
+    })
+</script>
+<style>
+    .sider{
+        background-color: #fff;
+    }
+</style>
+</body>
+</html>
