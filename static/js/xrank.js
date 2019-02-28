@@ -1,7 +1,7 @@
 let rankContent=function () {
     var content= {
         template: `<div>
-                      <Card style="width:300px">
+                      <Card style="width:300px;margin-top: 30px;" dis-hover>
                         <p slot="title">
                             热门文章
                         </p>
