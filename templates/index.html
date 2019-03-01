@@ -9,6 +9,8 @@
     <script src="../static/js/axios.min.js"></script>
     <script src="../static/js/xhead.js"></script>
     <script src="../static/js/xrank.js"></script>
+    <script src="../static/js/xArticleList.js"></script>
+    <script src="../static/js/xArticleDetail.js"></script>
     <link rel="stylesheet" href="../static/css/blog.css">
 </head>
 <body>
@@ -17,7 +19,7 @@
         <Layout>
             <Header class="head_c"><component :is="componentHead"></component></Header>
             <Layout class="layout_1">
-                <Content :style="{margin: '20px',width: '100%', background: '#fff', minHeight: '820px'}">Content</Content>
+                <Content :style="{margin: '20px',width: '100%', background: '#fff', minHeight: '820px'}"><component :is="componentContent"></component></Content>
                 <Sider class="sider" :style="{width: '280px','max-width':'280px',flex:'0 0 280px'}"><component :is="componentRank"></component></Sider>
             </Layout>
             <Footer>Footer</Footer>
@@ -28,15 +30,18 @@
     const sys = new Vue({
         el: '#app',
         data: {
-            componentName: 'comWelcome',
+            componentContent: 'xartList',
             componentHead: 'xhead',
             componentRank: 'xrank',
+            componentCont: 'xcont',
             strUserName: "",
             strPwd: ""
         },
         components: {
             xhead:headContent(1),
-            xrank:rankContent(1)
+            xrank:rankContent(1),
+            xartDetail:xArtDetail(1),
+            xartList:xArtList(1),
         },
         methods: {
             doLogin: function () {
