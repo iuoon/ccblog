@@ -7,11 +7,11 @@
     <link rel="stylesheet" href="../static/iview/iview.css">
     <script src="../static/iview/iview.min.js"></script>
     <script src="../static/js/axios.min.js"></script>
-    <script src="../static/js/xhead.js"></script>
-    <script src="../static/js/xrank.js"></script>
-    <script src="../static/js/xArticleList.js"></script>
-    <script src="../static/js/xArticleDetail.js"></script>
-    <link rel="stylesheet" href="../static/css/blog.css">
+    <script src="../static/js/xhead.js?v=1"></script>
+    <script src="../static/js/xrank.js?v=1"></script>
+    <script src="../static/js/xArticleList.js?v=4"></script>
+    <script src="../static/js/xArticleDetail.js?v=1"></script>
+    <link rel="stylesheet" href="../static/css/blog.css?v=8">
 </head>
 <body>
 <div id="app">
@@ -19,8 +19,8 @@
         <Layout>
             <Header class="head_c"><component :is="componentHead"></component></Header>
             <Layout class="layout_1">
-                <Content :style="{margin: '20px',width: '100%', background: '#fff', minHeight: '820px'}"><component :is="componentContent"></component></Content>
-                <Sider class="sider" :style="{width: '280px','max-width':'280px',flex:'0 0 280px'}"><component :is="componentRank"></component></Sider>
+                <Content class="content_layout"><component :is="componentContent"></component></Content>
+                <Sider class="sider" :style="{width: '400px','max-width':'400px',flex:'0 0 400px'}"><component :is="componentRank"></component></Sider>
             </Layout>
             <Footer>Footer</Footer>
         </Layout>
@@ -73,10 +73,5 @@
         }
     })
 </script>
-<style>
-    .sider{
-        background-color: #fff;
-    }
-</style>
 </body>
 </html>
