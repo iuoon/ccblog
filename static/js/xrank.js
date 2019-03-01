@@ -1,16 +1,16 @@
 let rankContent=function () {
     var content= {
         template: `<div>
-                      <Card style="width:300px;margin-top: 30px;" dis-hover>
-                        <p slot="title">
-                            热门文章
-                        </p>
-                        <ul>
-                            <li v-for="item in list">
-                                <a :href="item.url" target="_blank">{{ item.name }}</a>                                
-                            </li>
-                        </ul>
-                    </Card>
+                      <div class="card_head"><span class="span">热门文章</span></div>
+                      <div class="card">
+                        <div>
+                           <img src="http://su.semmv.com/wp-content/uploads/2016/06/2016062810005687.jpg" style="width: 100px;height: 60px;float: left">
+                        </div>
+                        <div style="margin-left: 110px;">
+                          <div><a class="link_1" @click="viewArticle(1)">我的文章</a></div>
+                          <div style="margin-top: 20px;"><span>11</span><span style="float: right;">2018-09-11</span></div>
+                        </div>
+                      </div>
                    </div>`,
         data () {
             return {
@@ -28,6 +28,9 @@ let rankContent=function () {
         },
         methods: {
             onclick(){
+                console.log(sys)
+            },
+            viewAirtcle(id){
                 console.log(sys)
             }
         }

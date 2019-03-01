@@ -13,3 +13,23 @@
     margin-left: 20px;
     margin-top: 10px;
 }
+.card_head{
+    border-bottom: 1px solid #DDD;
+    width: 240px;
+    margin-top: 20px;
+}
+.card{
+    width: 240px;
+    height: 160px;
+    margin-top: 20px;
+}
+.span{
+    padding: 4px;
+    color: #333;
+    font-size: large;
+}
+.link_1{
+    color: #555;
+}
+.link_1:hover{color:pink;}
+
