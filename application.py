@@ -26,6 +26,10 @@ def api_getArticles():
 def api_getHotArticles():
     return service.getHotArticles()
 
+@app.route('/api/getArticleDetail', methods=["GET"])
+def api_getArticleDetail():
+    return service.getArticleDetail()
+
 @app.route('/api/login', methods=["GET"])
 def api_login():
     return service.login()

@@ -51,7 +51,8 @@ let xArtList=function () {
                     });
             },
             view(index){
-                console.log(this.list[index])
+                sys.aid=this.list[index].id
+                sys.componentContent='xartDetail'
             },
             like(id){
 

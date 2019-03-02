@@ -1,6 +1,5 @@
 from flask import Flask, request
 from blog import control,dbConn,des
-from datetime import datetime
 
 def login():
     args = request.args
@@ -98,6 +97,7 @@ def getHotArticles():
     ret = mysql.getAll(sql, page)
     if ret:
         for row in ret:
+            print(ret)
             title=row[1]
             if len(title)>36:
                 title=str(row[1])[0:36]
@@ -107,6 +107,32 @@ def getHotArticles():
         data['start']=start
         data['size']=size
         data['total']=total
+        return control.okData(data)
+    else:
+        print(ret)
+    return control.error()
+
+# 获取文章详情
+def getArticleDetail():
+    args = request.args
+    id =args.get('id')
+    if id == None:
+        return control.errorMsg('请输入文章id')
+    id=int(id)
+    data ={}
+    # 查询列表
+    sql = "SELECT * FROM article WHERE id=%(id)s;"
+    param={"id":id}
+    mysql = dbConn.Mysql()
+    ret = mysql.getAll(sql, param)
+    if ret:
+        print(ret)
+        data['id']=ret[0]
+        data['title']=ret[1]
+        data['content']=ret[2]
+        data['likecount']=ret[3]
+        data['likecount']=ret[4]
+        data['createtime']=str(ret[6])[0:10]
         return control.okData(data)
     else:
         print(ret)
