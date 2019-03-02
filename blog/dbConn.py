@@ -7,7 +7,7 @@
 """
 import pymysql
 from DBUtils.PooledDB import PooledDB
-from DB import readConfig
+from blog import readConfig
 
 config = readConfig.ReadConfig()#实例化
 
@@ -20,6 +20,7 @@ user = config.get_mysql('user')
 passwd  = config.get_mysql('passwd')
 database = config.get_mysql('database')
 dbchar = config.get_mysql('dbchar')
+
 
 
 class Mysql(object):
@@ -176,14 +177,16 @@ class Mysql(object):
         self._cursor.close()
         self._conn.close()
 
+
+
 if __name__ == '__main__':
     print(host, port, user, passwd, database)
+    sqlAll = "SELECT * FROM user;"#sql语句，具体根据实际情况填写真实信息
     mysql = Mysql()
-    sqlAll = "SELECT 1 FROM DUAL;"#sql语句，具体根据实际情况填写真实信息
-    result = mysql.getAll(sqlAll, None)
+    result = mysql.getOne(sqlAll, None)
     if result:
         print(result)
         for row in result:
-            print(row[0], row[0])
+            print(row)
     mysql.dispose()#释放连接池资源
 

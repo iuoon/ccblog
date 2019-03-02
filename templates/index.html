@@ -11,7 +11,7 @@
     <script src="../static/js/xrank.js?v=1"></script>
     <script src="../static/js/xArticleList.js?v=4"></script>
     <script src="../static/js/xArticleDetail.js?v=1"></script>
-    <link rel="stylesheet" href="../static/css/blog.css?v=8">
+    <link rel="stylesheet" href="../static/css/blog.css?v=9">
 </head>
 <body>
 <div id="app">
@@ -34,8 +34,8 @@
             componentHead: 'xhead',
             componentRank: 'xrank',
             componentCont: 'xcont',
-            strUserName: "",
-            strPwd: ""
+            name: "",
+            pwd: ""
         },
         components: {
             xhead:headContent(1),
@@ -46,27 +46,24 @@
         methods: {
             doLogin: function () {
                 var self=this
-                axios.get("/ops/user/login?strUserName=" + this.strUserName+"&strPwd="+this.strPwd)
+                axios.get("/api/getArticles")
                     .then(function (res) {
-                        console.log(res.data);
                         if (res.data.code == 0){
                             window.location.href="index.html"
                             return
                         } else{
-                            self.$Modal.info({
-                                title: '提示',
-                                width: '300px',
-                                content: res.data.msg
-                            })
+                            this.$Message.info({
+                                content: res.data.msg,
+                                duration: 3
+                            });
                         }
                     })
                     .catch(function (error) {
                         console.log(error)
-                        self.$Modal.info({
-                            title: '提示',
-                            width: '300px',
-                            content: '登录失败'
-                        })
+                        this.$Message.info({
+                            content: '登录失败',
+                            duration: 3
+                        });
                     });
             }
 

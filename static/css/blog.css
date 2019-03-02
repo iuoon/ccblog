@@ -1,7 +1,7 @@
 .head_c{
     background-color: #fff;
     border-bottom: 1px solid #DDD;
-    height: 50px;
+    height: 80px;
 }
 .sider{
     background: #f5f7f9;
@@ -21,7 +21,7 @@
     color: #25befe;
     float: left;
     margin-left: 20px;
-    margin-top: 10px;
+    margin-top: 26px;
 }
 .card_head{
     border-bottom: 1px solid #DDD;
@@ -46,7 +46,7 @@
 
 .cardArticle{
     width: 100%;
-    height: 160px;
+    height: 130px;
     margin-top: 20px;
     margin-left: 20px;
     margin-right: 60px;
