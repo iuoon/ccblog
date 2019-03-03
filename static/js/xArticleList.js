@@ -18,6 +18,10 @@ let xArtList=function () {
                             
                         </Card>
                       </div>
+                      <div class="indexPageData">
+                         <i-button type="Warning" ghost @click="onclick()" ref>上一页</i-button>
+                         <i-button type="Warning" ghost @click="onclick()">下一页</i-button>
+                      </div>
                    </div>`,
         data () {
             return {
@@ -37,7 +41,7 @@ let xArtList=function () {
             getArticles(){
                 console.log(1111)
                 var self=this
-                axios.get("/api/getArticles")
+                axios.post("/api/getArticles")
                     .then(function (res) {
                         console.log(res.data)
                         if (res.data.code == 0){

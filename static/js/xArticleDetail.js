@@ -26,7 +26,7 @@ let xArtDetail=function () {
         methods: {
             getArticleDetail(){
                 var self=this
-                axios.get("/api/getHotArticles1?id="+sys.aid)
+                axios.post("/api/getHotArticles1?id="+sys.aid)
                     .then(function (res) {
                         console.log(res.data)
                         if (res.data.code == 0){

@@ -8,7 +8,7 @@ let rankContent=function () {
                         </div>
                         <div style="margin-left: 110px;">
                           <div style="float:left;"><a class="link_1" @click="view(index)" style="color: #ffadd2">{{article.title}}</a></div>
-                          <div ><i-icon type="ios-eye-outline"></i-icon><span>11</span><span style="float: right;">{{article.createtime}}</span></div>
+                          <div ><Icon type="ios-eye-outline"></Icon><span>11</span><span style="float: right;">{{article.createtime}}</span></div>
                         </div>
                       </div>
                    </div>`,
@@ -30,7 +30,7 @@ let rankContent=function () {
             getHotArticles(){
                 console.log(1111)
                 var self=this
-                axios.get("/api/getHotArticles?size=5")
+                axios.post("/api/getHotArticles?size=5")
                     .then(function (res) {
                         console.log(res.data)
                         if (res.data.code == 0){
