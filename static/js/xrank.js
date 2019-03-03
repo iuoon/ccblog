@@ -11,6 +11,7 @@ let rankContent=function () {
                           <div ><Icon type="ios-eye-outline"></Icon><span>11</span><span style="float: right;">{{article.createtime}}</span></div>
                         </div>
                       </div>
+                      <div style="margin-top: 40px;"><i-button type="success" size="large" style="width: 340px;">留言</i-button></div>
                    </div>`,
         data () {
             return {

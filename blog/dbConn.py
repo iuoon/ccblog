@@ -98,14 +98,24 @@ class Mysql(object):
             result = False
         return result
 
-    def insertOne(self, sql, value):
+    def insertOne(self, sql, param=None):
         """
         @summary: 向数据表插入一条记录
         @param sql:要插入的ＳＱＬ格式
         @param value:要插入的记录数据tuple/list
         @return: insertId 受影响的行数
         """
-        self._cursor.execute(sql, value)
+        self._cursor.execute(sql, param)
+        return self.__getInsertId()
+
+    def saveOne(self, sql):
+        """
+        @summary: 向数据表插入一条记录
+        @param sql:要插入的ＳＱＬ格式
+        @param value:要插入的记录数据tuple/list
+        @return: insertId 受影响的行数
+        """
+        self._cursor.execute(sql)
         return self.__getInsertId()
 
     def insertMany(self, sql, values):
@@ -123,8 +133,9 @@ class Mysql(object):
         获取当前连接最后一次插入操作生成的id,如果没有则为０
         """
         self._cursor.execute("SELECT @@IDENTITY AS id")
-        result = self._cursor.fetchall()
-        return result[0]['id']
+        result = self._cursor.fetchone()
+        print(result)
+        return result[0]
 
     def __query(self, sql, param=None):
         if param is None:

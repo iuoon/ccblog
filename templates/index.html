@@ -9,6 +9,7 @@
     <script src="../static/js/axios.min.js"></script>
     <script src="../static/js/xhead.js?v=1"></script>
     <script src="../static/js/xrank.js?v=1"></script>
+    <script src="../static/js/xFooter.js?v=1"></script>
     <script src="../static/js/xArticleList.js?v=4"></script>
     <script src="../static/js/xArticleDetail.js?v=1"></script>
     <link rel="stylesheet" href="../static/css/blog.css?v=9">
@@ -16,13 +17,13 @@
 <body>
 <div id="app">
     <div style="height: 100%" class="layout">
-        <Layout>
+        <Layout style="text-align: center;">
             <Header class="head_c"><component :is="componentHead"></component></Header>
             <Layout class="layout_1">
-                <Content class="content_layout"><component :is="componentContent"></component></Content>
-                <Sider class="sider" :style="{width: '400px','max-width':'400px',flex:'0 0 400px'}"><component :is="componentRank"></component></Sider>
+                <div><Content class="content_layout"><component :is="componentContent"></component></Content></div>
+                <Sider class="sider" :style="{width: '340px','max-width':'340px',flex:'0 0 340px'}"><component :is="componentRank"></component></Sider>
             </Layout>
-            <Footer>Footer</Footer>
+            <Footer><component :is="componentFooter"></component></Footer>
         </Layout>
     </div>
 </div>
@@ -34,6 +35,7 @@
             componentHead: 'xhead',
             componentRank: 'xrank',
             componentCont: 'xcont',
+            componentFooter: 'xfooter',
             aid: '',
         },
         components: {
@@ -41,6 +43,7 @@
             xrank:rankContent(1),
             xartDetail:xArtDetail(1),
             xartList:xArtList(1),
+            xfooter:footerContent(1),
         },
         methods: {
             doLogin: function () {

@@ -1,5 +1,6 @@
 from flask import Flask, request
 from blog import control,dbConn,des
+import urllib.parse
 
 def login():
     args = request.args
@@ -13,6 +14,7 @@ def login():
     user={"name":name,"pwd":pwd}
     mysql = dbConn.Mysql()
     ret = mysql.getOne(sql, user)
+    mysql.dispose()
     if ret:
         user2={"uid":ret[0],"name":ret[1]}
         blogid = des.enc(user2)
@@ -30,6 +32,7 @@ def getArticles():
         start = 1
     if size == None:
         size = 10
+    start=int(start)
     start = (start-1)*size
     total=0
     data ={}
@@ -51,6 +54,7 @@ def getArticles():
     sql = "SELECT * FROM article ORDER BY createtime DESC LIMIT %(start)s,%(size)s;"
     page={"start":start,"size":size}
     ret = mysql.getAll(sql, page)
+    mysql.dispose()
     if ret:
         print(ret)
         for row in ret:
@@ -60,9 +64,15 @@ def getArticles():
         data['start']=start
         data['size']=size
         data['total']=total
+        ys=total % size
+        if ys == 0:
+            data['totalPage']=int(total / size)
+        else:
+            data['totalPage']=int(total / size) +1
         return control.okData(data)
     else:
         print(ret)
+    mysql.dispose()
     return control.error()
 
 def getHotArticles():
@@ -90,14 +100,16 @@ def getHotArticles():
         data['size']=size
         data['totalCount']=total
         data['totalPage']=0
+        mysql.dispose()
         return control.okData(data)
     # 查询列表
     sql = "SELECT a.*,(likecount+readcount) as nsort FROM article a ORDER BY a.createtime DESC,nsort DESC LIMIT %(start)s,%(size)s;"
     page={"start":start,"size":size}
     ret = mysql.getAll(sql, page)
+    mysql.dispose()
     if ret:
+        print(ret)
         for row in ret:
-            print(ret)
             title=row[1]
             if len(title)>36:
                 title=str(row[1])[0:36]
@@ -107,6 +119,11 @@ def getHotArticles():
         data['start']=start
         data['size']=size
         data['total']=total
+        ys=total % size
+        if ys == 0:
+            data['totalPage']=int(total / size)
+        else:
+            data['totalPage']=int(total / size) +1
         return control.okData(data)
     else:
         print(ret)
@@ -124,7 +141,7 @@ def getArticleDetail():
     sql = "SELECT * FROM article WHERE id=%(id)s;"
     param={"id":id}
     mysql = dbConn.Mysql()
-    ret = mysql.getAll(sql, param)
+    ret = mysql.getOne(sql, param)
     if ret:
         print(ret)
         data['id']=ret[0]
@@ -133,7 +150,161 @@ def getArticleDetail():
         data['likecount']=ret[3]
         data['likecount']=ret[4]
         data['createtime']=str(ret[6])[0:10]
+
+        sql2="update article set readcount=readcount+1 where id=%(id)s;"
+        ret2 = mysql.update(sql2,param)
+        mysql.dispose()
         return control.okData(data)
     else:
         print(ret)
+    mysql.dispose()
     return control.error()
+
+# 获取评论
+def getComments():
+    args = request.args
+    start =args.get('start')
+    size = args.get('size')
+    id =args.get('id')
+    if id == None:
+        return control.errorMsg('请输入文章id')
+    id=int(id)
+    if start == None:
+        start = 1
+    if size == None:
+        size = 5
+    start=int(start)
+    start = (start-1)*size
+    total=0
+    data ={}
+    list =[]
+    # 查询总条数
+    mysql = dbConn.Mysql()
+    sql0 = "SELECT count(1) FROM comment WHERE articleid=%(id)s AND parentid=0;"
+    param={"id":id}
+    ret0 = mysql.getOne(sql0, param)
+    if ret0:
+        print(ret0)
+        total=ret0[0]
+    if total == 0:
+        data['list']=list
+        data['start']=start
+        data['size']=size
+        data['totalCount']=total
+        data['totalPage']=0
+        mysql.dispose()
+        return control.okData(data)
+    # 查询列表
+    sql = "SELECT * FROM comment WHERE articleid=%(id)s AND parentid=0 ORDER BY createtime DESC LIMIT %(start)s,%(size)s;"
+    page = {"id": id, "start": start, "size": size}
+    ret = mysql.getAll(sql, page)
+    if ret:
+        print(ret)
+        for row in ret:
+            comm={"id":row[0],"username":row[2],"content":row[4],"createtime":str(row[8])}
+            list.append(comm)
+        data['list']=list
+        data['start']=start
+        data['size']=size
+        data['total']=total
+        ys=total % size
+        if ys == 0:
+            data['totalPage']=int(total / size)
+        else:
+            data['totalPage']=int(total / size) +1
+        mysql.dispose()
+        return control.okData(data)
+    else:
+        print(ret)
+    mysql.dispose()
+    return control.error()
+
+def register():
+    args = request.args
+    name =args.get('name')
+    pwd = args.get('pwd')
+    if name == None:
+        return control.errorMsg('请输入姓名')
+    if pwd == None:
+        return control.errorMsg('请输入密码')
+    user={"name":name,"pwd":pwd}
+    mysql = dbConn.Mysql()
+    sql0 = "SELECT count(1) FROM comment WHERE articleid=%(id)s AND parentid=0;"
+    ret0 = mysql.getOne(sql0, None)
+    taotal=0
+    if ret0:
+        total=ret0[0]
+    if taotal== 0:
+        sql="insert into user(name,pwd,createtime,updatetime) values (%(name)s,%(pwd)s,NOW(),NOW());"
+        ret=mysql.insertOne(sql,user)
+        mysql.dispose()
+        if ret:
+            # 注册成功自动登录
+            user2={"uid":ret[0],"name":name}
+            blogid = des.enc(user2)
+            return control.okAndSetCookie(blogid)
+        else:
+            return control.errorMsg('注册失败')
+    else:
+        mysql.dispose()
+        return control.errorMsg('用户已存在')
+
+def saveArticle():
+    args = request.args
+    title =args.get('title')
+    content = args.get('content')
+    if title == None:
+        return control.errorMsg('请输入标题')
+    if content == None:
+        return control.errorMsg('请输入内容')
+    article={"title":title,"content":content,'authorname':'管理员'}
+    mysql = dbConn.Mysql()
+    sql="insert into article(title,content,authorid,authorname,createtime,updatetime) values (%(title)s,%(content)s,1,%(authorname)s,NOW(),NOW());"
+    ret=mysql.insertOne(sql,article)
+    mysql.dispose()
+    if ret:
+        return control.ok()
+    else:
+        return control.errorMsg('发布失败')
+
+def saveComment():
+    args = request.args
+    articleid =args.get('articleid')
+    content = args.get('content')
+    if articleid == None:
+        return control.errorMsg('请输入文章ID')
+    if content == None:
+        return control.errorMsg('请输入内容')
+    content=urllib.parse.unquote(content)
+    articleid=int(articleid)
+    username='网友'
+    mysql = dbConn.Mysql()
+    sql="insert into comment(articleid,content,userid,username,parentid,createtime,updatetime) value(%s,'%s',0,'%s',0,NOW(),NOW());" % (articleid,content,username)
+    print(sql)
+    ret=mysql.insertOne(sql)
+    mysql.dispose()
+    if ret:
+        return control.ok()
+    else:
+        return control.errorMsg('回复失败')
+
+
+def likeArticle():
+    args = request.args
+    articleid =args.get('articleid')
+    content = args.get('content')
+    if articleid == None:
+        return control.errorMsg('请输入文章ID')
+    if content == None:
+        return control.errorMsg('请输入内容')
+    articleid=int(articleid)
+    mysql = dbConn.Mysql()
+    param={"id":articleid}
+    sql="update article set likecount=likecount+1 where id=%(id)s;"
+    print(sql)
+    ret=mysql.update(sql,param)
+    mysql.dispose()
+    if ret:
+        return control.ok()
+    else:
+        return control.errorMsg('回复失败')
