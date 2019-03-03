@@ -37,17 +37,17 @@
         margin-top: 20px;
     }
 </style>
-<script src="../static/vue/vue.min.js"></script>
-<link rel="stylesheet" href="../static/iview/iview.css">
-<script src="../static/iview/iview.min.js"></script>
-<script src="../static/js/axios.min.js"></script>
+<script src="../../static/vue/vue.min.js"></script>
+<link rel="stylesheet" href="../../static/iview/iview.css">
+<script src="../../static/iview/iview.min.js"></script>
+<script src="../../static/js/axios.min.js"></script>
 
 <div id="app">
     <div class="background">
         <div class="login_c">
             <h2 class="head-u">用户登录</h2>
-            <i-input v-model="strUserName" placeholder="账号" style="width: 250px" class="input-d"></i-input>
-            <i-input v-model="strPwd" type="password" placeholder="密码" style="width: 250px" class="input-d"></i-input>
+            <i-input v-model="name" placeholder="账号" style="width: 250px" class="input-d"></i-input>
+            <i-input v-model="pwd" type="password" placeholder="密码" style="width: 250px" class="input-d"></i-input>
             <i-button type="info" style="width: 250px" class="input-d" @click="doLogin()">登录</i-button>
         </div>
     </div>
@@ -56,32 +56,30 @@
     new Vue({
         el: '#app',
         data: {
-            strUserName: "",
-            strPwd: ""
+            name: "",
+            pwd: ""
         },
         methods: {
             doLogin: function () {
                 var self=this
-                axios.get("/ops/user/login?strUserName=" + this.strUserName+"&strPwd="+this.strPwd)
+                axios.post("/api/login?name=" + this.name+"&pwd="+this.pwd)
                     .then(function (res) {
                         console.log(res.data);
                         if (res.data.code == 0){
-                            window.location.href="index.html"
+                            window.location.href="index"
                             return
                         } else{
-                            self.$Modal.info({
-                                title: '提示',
-                                width: '300px',
-                                content: res.data.msg
+                            self.$Message.error({
+                                content: res.data.msg,
+                                duration: 2
                             })
                         }
                     })
                     .catch(function (error) {
                         console.log(error)
-                        self.$Modal.info({
-                            title: '提示',
-                            width: '300px',
-                            content: '登录失败'
+                        self.$Message.info({
+                            content: '登录失败',
+                            duration: 2
                         })
                     });
             }

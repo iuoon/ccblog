@@ -10,9 +10,13 @@ def hello():
 def index():
     return render_template('index.html')
 
-@app.route('/login', methods=["GET"])
-def login():
-    return render_template('login.html')
+@app.route('/manage/login', methods=["GET"])
+def m_login():
+    return render_template('manage/login.html')
+
+@app.route('/manage/index', methods=["GET"])
+def m_index():
+    return render_template('manage/index.html')
 
 @app.route('/register', methods=["GET"])
 def register():
@@ -49,6 +53,11 @@ def api_saveComment():
 @app.route('/api/saveArticle', methods=['POST'])
 def api_saveArticle():
     return service.saveArticle()
+
+@app.route('/api/likeArticle', methods=['POST'])
+def api_likeArticle():
+    return service.likeArticle()
+
 
 if __name__ == "__main__":
     app.run(host='127.0.0.1', port=9000)

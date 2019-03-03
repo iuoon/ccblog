@@ -33,6 +33,7 @@ def getArticles():
     if size == None:
         size = 10
     start=int(start)
+    size=int(size)
     start = (start-1)*size
     total=0
     data ={}
@@ -58,7 +59,7 @@ def getArticles():
     if ret:
         print(ret)
         for row in ret:
-            article ={"id":row[0],"title":row[1],"content":row[2],"likecount":row[3],"readcount":row[4],"createtime":str(row[6])[0:10]}
+            article ={"id":row[0],"title":row[1],"content":row[2],"likecount":row[3],"readcount":row[4],"updatetime":str(row[6])[0:10],"createtime":str(row[7])[0:10],"coverimg":row[10]}
             list.append(article)
         data['list']=list
         data['start']=start
@@ -291,15 +292,12 @@ def saveComment():
 
 def likeArticle():
     args = request.args
-    articleid =args.get('articleid')
-    content = args.get('content')
-    if articleid == None:
+    id =args.get('id')
+    if id == None:
         return control.errorMsg('请输入文章ID')
-    if content == None:
-        return control.errorMsg('请输入内容')
-    articleid=int(articleid)
+    id=int(id)
     mysql = dbConn.Mysql()
-    param={"id":articleid}
+    param={"id":id}
     sql="update article set likecount=likecount+1 where id=%(id)s;"
     print(sql)
     ret=mysql.update(sql,param)
