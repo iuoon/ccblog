@@ -4,7 +4,7 @@ let xArtList=function () {
                       <div v-for="(article,index) in list" class="cardArticle">
                         <Card dis-hover style="border-radius: 2px;height: 130px;">
                             <div style="float: left">
-                                <img src="http://su.semmv.com/wp-content/uploads/2016/06/2016062810005687.jpg" width="200px" height="100px" >                                
+                                <img :src="article.coverimg" width="200px" height="100px" >                                
                             </div>
                             <div style="margin-left: 210px">           
                                <div style="float:left;margin-top: -80px;"><a href="javascript:void(0)" @click="view(index)"  style="color: #2db7f5;">{{article.title}}</a></div>

@@ -6,10 +6,10 @@ let xArtDetail=function () {
                            <span style="">{{article.title}}</span>
                         </div>
                         <div>
-                           <img src="http://su.semmv.com/wp-content/uploads/2016/06/2016062810005687.jpg" style="width: 500px;height: 300px;margin-top: 30px;">
+                           <img :src="article.coverimg" style="width: 600px;height: 300px;margin-top: 30px;">
                         </div>
                         <div style="margin-left:10px;margin-top: 40px;">
-                          <div style="font-size: medium">{{article.content}}</div>
+                          <div style="font-size: medium"><dl v-html="article.content">{{article.content}}</dl></div>
                         </div>  
                         <div>
                            <i-button type="success" ghost size="large"  @click="likeArticle()" style="margin-top: 10px;width: 100px;"">点赞</i-button>
@@ -34,6 +34,7 @@ let xArtDetail=function () {
                     id:'',
                     title:'',
                     content:'',
+                    coverimg:'',
                 },
                 list:[],
                 totalPage:0,
@@ -86,7 +87,10 @@ let xArtDetail=function () {
                                 duration: 2
                             });
                         } else{
-                            console.log(res)
+                            self.$Message.error({
+                                content: '点赞失败',
+                                duration: 2
+                            });
                         }
                     })
                     .catch(function (error) {
@@ -112,7 +116,10 @@ let xArtDetail=function () {
                             self.commentContent='';
                             self.getComments();
                         } else{
-                            console.log(res)
+                            self.$Message.error({
+                                content: '回复失败',
+                                duration: 2
+                            });
                         }
                     })
                     .catch(function (error) {

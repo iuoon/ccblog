@@ -1,5 +1,6 @@
 from flask import Flask, render_template, json
 from blog import control, service
+import os
 app = Flask(__name__)
 
 @app.route("/")
@@ -58,6 +59,13 @@ def api_saveArticle():
 def api_likeArticle():
     return service.likeArticle()
 
+@app.route('/api/upload', methods=['POST'])
+def api_upload():
+    return service.upload()
+
+@app.route('/api/delArticle', methods=['POST'])
+def api_delArticle():
+    return service.delArticle()
 
 if __name__ == "__main__":
     app.run(host='127.0.0.1', port=9000)

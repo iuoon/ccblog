@@ -1,6 +1,7 @@
 from flask import Flask, request
 from blog import control,dbConn,des
 import urllib.parse
+import os
 
 def login():
     args = request.args
@@ -114,7 +115,7 @@ def getHotArticles():
             title=row[1]
             if len(title)>36:
                 title=str(row[1])[0:36]
-            article ={"id":row[0],"title":title,"content":row[2],"likecount":row[3],"readcount":row[4],"createtime":str(row[6])[0:10]}
+            article ={"id":row[0],"title":title,"content":row[2],"likecount":row[3],"readcount":row[4],"updatetime":str(row[6])[0:10],"createtime":str(row[7])[0:10],"coverimg":row[10]}
             list.append(article)
         data['list']=list
         data['start']=start
@@ -150,8 +151,8 @@ def getArticleDetail():
         data['content']=ret[2]
         data['likecount']=ret[3]
         data['likecount']=ret[4]
-        data['createtime']=str(ret[6])[0:10]
-
+        data['createtime']=str(ret[7])[0:10]
+        data['coverimg']=ret[10]
         sql2="update article set readcount=readcount+1 where id=%(id)s;"
         ret2 = mysql.update(sql2,param)
         mysql.dispose()
@@ -252,21 +253,30 @@ def register():
 
 def saveArticle():
     args = request.args
-    title =args.get('title')
-    content = args.get('content')
+    title = request.form['title']
+    content =  request.form['content']
+    coverimg = request.form['coverimg']
+    id =args.get('id')
     if title == None:
         return control.errorMsg('请输入标题')
     if content == None:
         return control.errorMsg('请输入内容')
-    article={"title":title,"content":content,'authorname':'管理员'}
+    if coverimg == None:
+        return control.errorMsg('请输入封面')
+    if id != None:
+       id=int(id)
+    article={"id":id,"title":title,"content":content,'authorname':'管理员',"coverimg":coverimg}
     mysql = dbConn.Mysql()
-    sql="insert into article(title,content,authorid,authorname,createtime,updatetime) values (%(title)s,%(content)s,1,%(authorname)s,NOW(),NOW());"
-    ret=mysql.insertOne(sql,article)
+    sql="insert into article(title,content,authorid,authorname,createtime,updatetime,coverimg) values (%(title)s,%(content)s,1,%(authorname)s,NOW(),NOW(),%(coverimg)s);"
+    if id != None:
+        sql="update article set title=%(title)s,content=%(content)s,updatetime=NOW(),coverimg=%(coverimg)s where id=%(id)s;"
+    print(sql)
+    ret=mysql.update(sql,article)
     mysql.dispose()
     if ret:
         return control.ok()
     else:
-        return control.errorMsg('发布失败')
+        return control.errorMsg('保存失败')
 
 def saveComment():
     args = request.args
@@ -306,3 +316,33 @@ def likeArticle():
         return control.ok()
     else:
         return control.errorMsg('回复失败')
+
+def upload():
+    images = request.files.get('file')
+    # 得到upload的路径
+    upload_dir = os.path.join(os.path.join(os.path.abspath('.'),'static'), 'upload')
+    if not os.path.exists(upload_dir):
+        os.makedirs(upload_dir)
+    url = os.path.join(upload_dir,images.filename)
+    images.save(url)
+    realurl=os.path.join(request.host_url,'static/upload/'+images.filename)
+    data={"url":realurl}
+    return control.okData(data)
+
+def delArticle():
+    args = request.args
+    id =args.get('id')
+    if id == None:
+        return control.errorMsg('请输入文章ID')
+    id=int(id)
+    mysql = dbConn.Mysql()
+    param={"id":id}
+    sql="delete from article where id=%(id)s;"
+    print(sql)
+    ret=mysql.update(sql,param)
+    mysql.dispose()
+    if ret:
+        return control.ok()
+    else:
+        return control.errorMsg('操作失败')
+
