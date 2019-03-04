@@ -1,7 +1,7 @@
 from flask import Flask, request
 from blog import control,dbConn,des
 import urllib.parse
-import os
+import os,sys
 
 def login():
     args = request.args
@@ -319,10 +319,11 @@ def likeArticle():
 def upload():
     images = request.files.get('file')
     # 得到upload的路径
-    upload_dir = os.path.join(os.path.join(os.path.abspath('.'),'static'), 'upload')
+    upload_dir = os.path.join(os.path.join(sys.path[0],'static'), 'upload')
     if not os.path.exists(upload_dir):
         os.makedirs(upload_dir)
     url = os.path.join(upload_dir,images.filename)
+    print(url)
     images.save(url)
     realurl=os.path.join(request.host_url,'static/upload/'+images.filename)
     data={"url":realurl}

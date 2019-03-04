@@ -67,7 +67,7 @@ let xArticleEdit=function () {
                 axios.post('/api/upload',param,config)
                     .then(res=>{
                         console.log(res.data);
-                        self.coverimg=res.data.data.url;
+                        self.article.coverimg=res.data.data.url;
                     }).catch(function (error) {
                         console.log(error)
                     });

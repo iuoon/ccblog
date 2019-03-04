@@ -17,6 +17,10 @@ let xLiuyanList=function () {
                          <i-button type="warning" ghost @click="prePage()" :disabled="predisabled">上一页</i-button>
                          <i-button type="warning" ghost @click="nextPage()" style="margin-left: 40px;" :disabled="nextdisabled">下一页</i-button>
                       </div>
+                      <div style="margin-left: 40px;margin-top: 40px;margin-right: 40px;">
+                           <i-input v-model="content" type="textarea" :rows="4" placeholder="输入留言" />
+                           <i-button type="success" size="large" style="width: 80px;" @click="saveLiuyan()" style="margin-top: 10px">发表留言</i-button>
+                        </div>
                    </div>`,
         data () {
             return {
@@ -30,6 +34,7 @@ let xLiuyanList=function () {
                 nextdisabled:true,
                 currentPage:1,
                 totalPage:0,
+                content:'',
             }
         },
         created (){
@@ -70,6 +75,31 @@ let xLiuyanList=function () {
             nextPage(){
                 this.currentPage+=1
                 this.getLiuyans()
+            },
+            saveLiuyan(){
+                var self=this;
+                let param = new FormData(); //创建form对象
+                param.append('reply','');//通过append向form对象添加数据
+                param.append('content',self.content);
+                let config = {
+                    headers:{'Content-Type':'x-www-form-urlencoded'}
+                }; //添加请求头
+                axios.post("/api/saveLiuyan",param,config)
+                    .then(function (res) {
+                        console.log(res.data)
+                        if(res.data.code == 0){
+                            self.$Message.success({
+                                content: '保存成功',
+                                duration: 2
+                            })
+                        self.getLiuyans();
+                        }else{
+                            self.$Message.error({
+                                content: res.data.msg,
+                                duration: 2
+                            })
+                        }
+                    }).catch(function (error) {console.log(error) });
             }
         }
     }
