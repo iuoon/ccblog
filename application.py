@@ -67,5 +67,19 @@ def api_upload():
 def api_delArticle():
     return service.delArticle()
 
+@app.route('/api/getLiuyans', methods=['POST'])
+def api_getLiuyans():
+    return service.getLiuyans()
+
+@app.route('/api/saveLiuyan', methods=['POST'])
+def api_saveLiuyan():
+    return service.saveLiuyan()
+
+@app.route('/api/delLiuyan', methods=['POST'])
+def api_delLiuyan():
+    return service.delLiuyan()
+
+
+
 if __name__ == "__main__":
     app.run(host='127.0.0.1', port=9000)

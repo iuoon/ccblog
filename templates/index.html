@@ -13,6 +13,7 @@
     <script src="../static/js/xArticleList.js?v=4"></script>
     <script src="../static/js/xArticleDetail.js?v=1"></script>
     <link rel="stylesheet" href="../static/css/blog.css?v=9">
+    <script src="../static/js/xliuyan.js?v=3"></script>
 </head>
 <body>
 <div id="app">
@@ -36,6 +37,7 @@
             componentRank: 'xrank',
             componentCont: 'xcont',
             componentFooter: 'xfooter',
+            componentLiuyan: 'xLiuyan',
             aid: '',
         },
         components: {
@@ -44,30 +46,9 @@
             xartDetail:xArtDetail(1),
             xartList:xArtList(1),
             xfooter:footerContent(1),
+            xLiuyan:xLiuyanList(1),
         },
         methods: {
-            doLogin: function () {
-                var self=this
-                axios.post("/api/getArticles")
-                    .then(function (res) {
-                        if (res.data.code == 0){
-                            window.location.href="index.html"
-                            return
-                        } else{
-                            this.$Message.info({
-                                content: res.data.msg,
-                                duration: 3
-                            });
-                        }
-                    })
-                    .catch(function (error) {
-                        console.log(error)
-                        this.$Message.info({
-                            content: '登录失败',
-                            duration: 3
-                        });
-                    });
-            }
 
         }
     })

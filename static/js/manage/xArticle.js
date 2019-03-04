@@ -5,6 +5,9 @@ let xArticle=function () {
                         <template slot-scope="{ row, index  }" slot="id">
                             <span>{{ row.id }}</span>
                         </template>
+                        <template slot-scope="{ row, index  }" slot="coverimg">
+                            <img :src="row.coverimg" width="100px" height="50px">
+                        </template>
                         <template slot-scope="{ row, index  }" slot="title">                           
                             <span>{{ row.title }}</span>
                         </template>
@@ -38,6 +41,10 @@ let xArticle=function () {
                         slot: 'id',
                     },
                     {
+                        title: '封面',
+                        slot: 'coverimg',
+                    },
+                    {
                         title: '标题',
                         slot: 'title',
                     },
@@ -57,10 +64,6 @@ let xArticle=function () {
                         title: '更新时间',
                         slot: 'updatetime',
                     },
-                    /*   {
-                        title: '封面',
-                        slot: 'coverimg',
-                    },*/
                     {
                         title: '操作',
                         slot: 'action',
@@ -89,35 +92,6 @@ let xArticle=function () {
             this.getPageData();//初始化加载数据
         },
         methods: {
-            updateArticle (index){
-                var self=this
-                axios.get("/ops/task/updateTask?lId=" +this.list[index].lId+
-                    "&strName=" +self.task.strName+
-                    "&strTargetUrl=" +self.task.strTargetUrl+
-                    "&strCron=" +self.task.strCron+
-                    "&strRemark=" +self.task.strRemark)
-                    .then(function (res) {
-                        console.log(res.data)
-                        if(res.data.code == 0){
-                            self.list[index].strName = self.task.strName
-                            self.list[index].strCron = self.task.strCron
-                            self.list[index].strRemark = self.task.strRemark
-                            self.list[index].strTargetUrl = self.task.strTargetUrl
-                            self.editIndex = -1
-                            self.$Modal.success({
-                                title: '提示',
-                                width: '300px',
-                                content: '保存成功'
-                            })
-                        }else{
-                            self.$Modal.error({
-                                title: '提示',
-                                width: '300px',
-                                content: res.data.msg
-                            })
-                        }
-                    }).catch(function (error) {console.log(error) });
-            },
             delArticle (index) {
                 var self=this
                 axios.post("/api/delArticle?id=" +this.list[index].id)

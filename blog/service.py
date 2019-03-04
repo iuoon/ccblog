@@ -74,7 +74,6 @@ def getArticles():
         return control.okData(data)
     else:
         print(ret)
-    mysql.dispose()
     return control.error()
 
 def getHotArticles():
@@ -346,3 +345,98 @@ def delArticle():
     else:
         return control.errorMsg('操作失败')
 
+
+# 获取最新列表
+def getLiuyans():
+    args = request.args
+    start =args.get('start')
+    size = args.get('size')
+    if start == None:
+        start = 1
+    if size == None:
+        size = 10
+    start=int(start)
+    size=int(size)
+    start = (start-1)*size
+    total=0
+    data ={}
+    list =[]
+    # 查询总条数
+    mysql = dbConn.Mysql()
+    sql0 = "SELECT count(1) FROM liuyan;"
+    ret0 = mysql.getOne(sql0, None)
+    if ret0:
+        total=ret0[0]
+    if total == 0:
+        data['list']=list
+        data['start']=start
+        data['size']=size
+        data['totalCount']=total
+        data['totalPage']=0
+        return control.okData(data)
+    # 查询列表
+    sql = "SELECT id,content,reply,createtime,replytime FROM liuyan ORDER BY createtime DESC LIMIT %(start)s,%(size)s;"
+    page={"start":start,"size":size}
+    ret = mysql.getAll(sql, page)
+    mysql.dispose()
+    if ret:
+        print(ret)
+        for row in ret:
+            replytime=''
+            if row[4] !=None:
+                replytime=str(row[4])[0:10]
+            liuyan ={"id":row[0],"content":row[1],"reply":row[2],"createtime":str(row[3])[0:10],"replytime":replytime}
+            list.append(liuyan)
+        data['list']=list
+        data['start']=start
+        data['size']=size
+        data['total']=total
+        ys=total % size
+        if ys == 0:
+            data['totalPage']=int(total / size)
+        else:
+            data['totalPage']=int(total / size) +1
+        return control.okData(data)
+    else:
+        print(ret)
+    return control.error()
+
+def saveLiuyan():
+    print(111)
+    args = request.args
+    content = request.form['content']
+    reply = request.form['reply']
+    id = args.get('id')
+    if id != None:
+        id = int(id)
+    article = {"id": id, "content": content}
+    mysql = dbConn.Mysql()
+    sql = "insert into liuyan(content,createtime) values (%(content)s,NOW());"
+    if id != None:
+        article = {"id": id, "reply": reply}
+        sql = "update liuyan set reply=%(reply)s,replytime=NOW() where id=%(id)s;"
+    print(sql)
+    ret = mysql.update(sql, article)
+    mysql.dispose()
+    if ret:
+        return control.ok()
+    else:
+        return control.errorMsg('保存失败')
+
+
+def delLiuyan():
+    args = request.args
+    id =args.get('id')
+    if id == None:
+        return control.errorMsg('请输入ID')
+    id=int(id)
+    mysql = dbConn.Mysql()
+    param={"id":id}
+    sql="delete from liuyan where id=%(id)s;"
+    print(sql)
+    ret=mysql.update(sql,param)
+    mysql.dispose()
+    if ret:
+        return control.ok()
+    else:
+        return control.errorMsg('操作失败')

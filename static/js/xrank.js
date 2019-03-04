@@ -11,7 +11,7 @@ let rankContent=function () {
                           <div ><Icon type="ios-eye-outline"></Icon><span>11</span><span style="float: right;">{{article.createtime}}</span></div>
                         </div>
                       </div>
-                      <div style="margin-top: 40px;"><i-button type="success" size="large" style="width: 340px;">留言</i-button></div>
+                      <div style="margin-top: 40px;"><i-button type="success" size="large" style="width: 340px;" @click="viewLiuyan">留言</i-button></div>
                    </div>`,
         data () {
             return {
@@ -30,7 +30,6 @@ let rankContent=function () {
         },
         methods: {
             getHotArticles(){
-                console.log(1111)
                 var self=this
                 axios.post("/api/getHotArticles?size=5")
                     .then(function (res) {
@@ -45,7 +44,11 @@ let rankContent=function () {
                         console.log(error)
                     });
             },
+            viewLiuyan(){
+                sys.componentContent='xLiuyan'
+            }
         }
+
     }
     return content
 }
