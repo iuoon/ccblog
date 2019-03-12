@@ -45,7 +45,7 @@ let xArtList=function () {
             getArticles(){
                 console.log(1111)
                 var self=this
-                axios.post("/api/getArticles?start="+self.currentPage)
+                axios.post("/api/getArticles?start="+self.currentPage+"&size=6")
                     .then(function (res) {
                         console.log(res.data)
                         if (res.data.code == 0){
