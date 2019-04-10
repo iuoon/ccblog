@@ -25,7 +25,7 @@ let xArtDetail=function (aid) {
                         </div>  
                         <div style="margin-left: 40px;margin-top: 40px;margin-right: 40px;">
                            <i-input v-model="commentContent" type="textarea" :rows="4" placeholder="回复内容" />
-                           <i-button type="success" size="large" style="width: 80px;" @click="saveComment()" style="margin-top: 10px">发表回复</i-button>
+                           <i-button type="success" size="large" style="width: 80px;" @click="saveComment()" style="margin-top: 10px">发表评论</i-button>
                         </div>                  
                    </div>`,
         data () {
