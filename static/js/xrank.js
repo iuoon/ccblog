@@ -8,7 +8,7 @@ let rankContent=function () {
                         </div>
                         <div style="margin-left: 110px;">
                           <div style="float:left;"><a class="link_1" @click="view(index)" style="color: #ffadd2">{{article.title}}</a></div>
-                          <div ><Icon type="ios-eye-outline"></Icon><span>11</span><span style="float: right;">{{article.createtime}}</span></div>
+                          <div ><Icon type="ios-eye-outline"></Icon><span>{{article.readcount}}</span><span style="float: right;">{{article.createtime}}</span></div>
                         </div>
                       </div>
                       <div style="margin-top: 40px;"><i-button type="success" size="large" style="width: 340px;" @click="viewLiuyan">留言</i-button></div>
@@ -46,6 +46,10 @@ let rankContent=function () {
             },
             viewLiuyan(){
                 sys.componentContent='xLiuyan'
+            },
+            view(index){
+                sys.aid=this.list[index].id
+                sys.componentContent='xartDetail'
             }
         }
 
