@@ -9,6 +9,9 @@ let xArticleEdit=function () {
                      <div style="width: 600px;height: 300px;border: 1px dashed #ccc;border-radius: 2px;">
                         <img :src="article.coverimg" style="width: 600px;height: 300px;">
                      </div>
+                     <div>
+                       <span>封面地址：</span><span>{{article.coverimg}}</span>
+                     </div>
                      <br>
                      <Input v-model="article.title" placeholder="输入标题" clearable  />
                      <br>
@@ -23,7 +26,7 @@ let xArticleEdit=function () {
                     id:'',
                     title:'',
                     content:'',
-                    coverimg:'',
+                    coverimg:''
                 },
             }
         },

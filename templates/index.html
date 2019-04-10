@@ -7,11 +7,12 @@
     <link rel="stylesheet" href="../static/iview/iview.css">
     <script src="../static/iview/iview.min.js"></script>
     <script src="../static/js/axios.min.js"></script>
-    <script src="../static/js/xhead.js?v=1"></script>
+    <script src="../static/js/xHead.js?v=1"></script>
     <script src="../static/js/xrank.js?v=1"></script>
     <script src="../static/js/xFooter.js?v=1"></script>
     <script src="../static/js/xArticleList.js?v=4"></script>
     <script src="../static/js/xArticleDetail.js?v=1"></script>
+    <script src="../static/js/xArticleWhite.js?v=1"></script>
     <link rel="stylesheet" href="../static/css/blog.css?v=9">
     <script src="../static/js/xliuyan.js?v=3"></script>
 </head>
@@ -41,12 +42,13 @@
             aid: '',
         },
         components: {
-            xhead:headContent(1),
-            xrank:rankContent(1),
-            xartDetail:xArtDetail(1),
-            xartList:xArtList(1),
-            xfooter:footerContent(1),
-            xLiuyan:xLiuyanList(1),
+            xhead:headContent(this.aid),
+            xrank:rankContent(this.aid),
+            xartDetail:xArtDetail(this.aid),
+            xartWhite:xArtWhite(this.aid),
+            xartList:xArtList(this.aid),
+            xfooter:footerContent(this.aid),
+            xLiuyan:xLiuyanList(this.aid),
         },
         methods: {
 

@@ -1,4 +1,4 @@
-let xArtDetail=function () {
+let xArtDetail=function (aid) {
     var con= {
         template: `<div class="detailContent">       
                         <br>                                  

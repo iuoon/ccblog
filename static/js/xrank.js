@@ -49,7 +49,8 @@ let rankContent=function () {
             },
             view(index){
                 sys.aid=this.list[index].id
-                sys.componentContent='xartDetail'
+                console.log(this.list[index].id);
+                this.$nextTick(() => (sys.componentContent='xartDetail'))
             }
         }
 
