@@ -112,6 +112,7 @@ let xArticle=function () {
                     }).catch(function (error) {console.log(error) });
             },
             addArticle(){
+                g_vue.aid=-1
                 g_vue.componentName='comArticleEdit'
             },
             editArticle(index){
