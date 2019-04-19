@@ -50,6 +50,7 @@ let rankContent=function () {
             view(index){
                 sys.aid=this.list[index].id
                 console.log(this.list[index].id);
+                sys.componentContent='xartWhite'
                 this.$nextTick(() => (sys.componentContent='xartDetail'))
             }
         }
